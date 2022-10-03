@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>User Page</title>
+</head>
+<body class="bg-light">
+<!--Header-->
+<header>
+    <div class="container-fluid">
+        <div class="row bg-dark">
+            <div class="col-4">
+                <div class="text-white mt-3">
+                    <strong>
+                        <th:block th:text="${user.name}"></th:block>
+                    </strong>
+                    <th:block>with roles</th:block>
+                    <th:block th:each="role : ${user.getRoles()}">
+                        <th:block th:text="${role.toString()}"></th:block>
+                    </th:block>
+                </div>
+            </div>
+            <div class="col-7"></div>
+            <div class="col-1">
+                <div class="btn">
+                    <a class="btn btn-outline-light btn-md" href="/logout" role="button">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--Navigation bar-->
+<div class="row h-600">
+    <div class="col-2 sidebar container-fluid bg-white text-center" style="height: 100vh">
+        <div class="nav flex-colum nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="container">
+                <a class="nav-link active" href="/admin" th:if="${user.getRoles().size > 1}" role="tab"
+                   aria-controls="v-pills-home" aria-selected="true">Admin</a>
+                <a class="nav-link" href="/user/" role="tab"
+                   aria-controls="v-pills-profile" aria-selected="false">User</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-10 bg-light">
+        <div class="h1 p-3">User information page</div>
+        <nav class="card col-11 px-2">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">Users Table</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h2 class="card-header">About user</h2>
+                        <div class="container-fluid">
+                            <table class="table table-striped">
+                                <div class="p-30">
+                                    <br>
+                                </div>
+                                <thead class="text-black">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:scope="row">
+                                    <td th:scope="row" th:utext="${user.getId()}">ID</td>
+                                    <td th:scope="row" th:utext="${user.getName()}">First Name</td>
+                                    <td th:scope="row" th:utext="${user.getLastName()}">Last Name</td>
+                                    <td th:scope="row" th:utext="${user.getAge()}">Age</td>
+                                    <td th:scope="row">
+                                        <th:block th:each="role : ${user.getRoles()}">
+                                            <th:block th:text="${role.getName}"></th:block>
+                                        </th:block>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+
+</body>
+</html>
