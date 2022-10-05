@@ -15,20 +15,20 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service
 public class UserServiceImpl implements UserService {
 
+ private final RoleService roleService;
  private final UserRepository userRepository;
  private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
  @Autowired
- public UserServiceImpl(UserRepository userRepository) {
+ public UserServiceImpl(RoleService roleService, UserRepository userRepository) {
+  this.roleService = roleService;
   this.userRepository = userRepository;
  }
 
@@ -39,18 +39,11 @@ public class UserServiceImpl implements UserService {
  @Transactional
  public User saveUser(User user, String role) {
   User newUser = new User();
-  Set<Role> roles;
-  if (role.equals("ROLE_ADMIN")) {
-   roles = Set.of(new Role(user.getId(), "ROLE_USER"), new Role(user.getId(), "ROLE_ADMIN"));
-  } else {
-   roles = Set.of(new Role(user.getId(), "ROLE_USER"));
-  }
-  newUser.setRoles(roles);
+  newUser.setRoles(roleService.getRoleSetFromString(newUser, role));
   newUser.setName(user.getName());
   newUser.setLastName(user.getLastName());
   newUser.setAge(user.getAge());
   newUser.setPassword(user.getPassword());
-  newUser.setRoles(roles);
   newUser.setId(user.getId());
   newUser.setPassword(passwordEncoder.encode(user.getPassword()));
   return userRepository.save(newUser);
@@ -58,18 +51,11 @@ public class UserServiceImpl implements UserService {
 
  @Transactional
  public void edit(User user, Integer id, String role) {
-  Set<Role> rolesToChange;
-  if (role.equals("ROLE_ADMIN")) {
-   rolesToChange = Set.of(new Role(1, "ROLE_USER"),new Role(2, "ROLE_ADMIN"));
-  } else {
-   rolesToChange = Set.of(new Role(1, "ROLE_USER"));
-  }
-
   User editUser = new User();
   editUser.setName(user.getName());
   editUser.setLastName(user.getLastName());
   editUser.setAge(user.getAge());
-  editUser.setRoles(rolesToChange);
+  editUser.setRoles(roleService.getRoleSetFromString(user, role));
   editUser.setId(id);
   editUser.setPassword(passwordEncoder.encode(user.getPassword()));
   userRepository.save(editUser);
